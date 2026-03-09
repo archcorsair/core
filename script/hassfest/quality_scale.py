@@ -1499,7 +1499,6 @@ INTEGRATIONS_WITHOUT_SCALE = [
     "juicenet",
     "justnimbus",
     "jvc_projector",
-    "kaiterra",
     "kaleidescape",
     "kankun",
     "keba",
