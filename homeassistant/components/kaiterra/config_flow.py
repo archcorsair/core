@@ -13,7 +13,7 @@ from homeassistant.config_entries import (
     ConfigFlowResult,
     OptionsFlowWithReload,
 )
-from homeassistant.const import CONF_API_KEY, CONF_DEVICE_ID, CONF_NAME
+from homeassistant.const import CONF_API_KEY, CONF_DEVICE_ID
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.selector import (
@@ -46,7 +46,6 @@ USER_DATA_SCHEMA = vol.Schema(
             )
         ),
         vol.Required(CONF_DEVICE_ID): str,
-        vol.Optional(CONF_NAME): str,
     }
 )
 
@@ -64,7 +63,7 @@ class KaiterraConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Kaiterra."""
 
     VERSION = 1
-    MINOR_VERSION = 2
+    MINOR_VERSION = 3
 
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
@@ -87,8 +86,9 @@ class KaiterraConfigFlow(ConfigFlow, domain=DOMAIN):
                 _LOGGER.exception("Unexpected exception")
                 errors["base"] = "unknown"
             else:
-                title = user_input.get(CONF_NAME) or user_input[CONF_DEVICE_ID]
-                return self.async_create_entry(title=title, data=user_input)
+                return self.async_create_entry(
+                    title=user_input[CONF_DEVICE_ID], data=user_input
+                )
 
         return self.async_show_form(
             step_id="user",
@@ -99,9 +99,7 @@ class KaiterraConfigFlow(ConfigFlow, domain=DOMAIN):
             errors=errors,
         )
 
-    async def async_step_reauth(
-        self, entry_data: dict[str, Any]
-    ) -> ConfigFlowResult:
+    async def async_step_reauth(self, entry_data: dict[str, Any]) -> ConfigFlowResult:
         """Handle the start of a reauthentication flow."""
         return await self.async_step_reauth_confirm()
 
