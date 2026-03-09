@@ -512,7 +512,6 @@ INTEGRATIONS_WITHOUT_QUALITY_SCALE_FILE = [
     "juicenet",
     "justnimbus",
     "jvc_projector",
-    "kaiterra",
     "kaleidescape",
     "kankun",
     "keba",
